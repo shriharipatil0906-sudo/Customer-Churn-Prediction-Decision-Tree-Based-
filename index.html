@@ -1,0 +1,273 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Customer Churn Prediction</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f7fb;
+            color: #222;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 900px;
+            margin: 40px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            margin-top: 25px;
+            margin-bottom: 15px;
+            font-size: 20px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            margin-bottom: 6px;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        input,
+        select {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .button-container {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        button {
+            padding: 12px 35px;
+            border: none;
+            border-radius: 7px;
+            background: #2563eb;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #1d4ed8;
+        }
+
+        .result {
+            margin-top: 25px;
+            padding: 15px;
+            text-align: center;
+            background: #eef4ff;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        @media (max-width: 650px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>Customer Churn Prediction</h1>
+
+    <p class="subtitle">
+        Decision Tree Based Telecom Customer Churn Prediction
+    </p>
+
+    <form action="/predict" method="POST">
+
+        <h2 class="section-title">Customer Information</h2>
+
+        <div class="form-grid">
+
+            <div class="form-group">
+                <label>Account Length</label>
+                <input type="number" name="account_length" required>
+            </div>
+
+            <div class="form-group">
+                <label>International Plan</label>
+                <select name="international_plan" required>
+                    <option value="0">No</option>
+                    <option value="1">Yes</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Voice Mail Plan</label>
+                <select name="voice_mail_plan" required>
+                    <option value="0">No</option>
+                    <option value="1">Yes</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Number of Voicemail Messages</label>
+                <input type="number" name="vmail_messages" required>
+            </div>
+
+        </div>
+
+
+        <h2 class="section-title">Day Usage</h2>
+
+        <div class="form-grid">
+
+            <div class="form-group">
+                <label>Total Day Minutes</label>
+                <input type="number" step="any" name="day_minutes" required>
+            </div>
+
+            <div class="form-group">
+                <label>Total Day Calls</label>
+                <input type="number" name="day_calls" required>
+            </div>
+
+            <div class="form-group">
+                <label>Total Day Charge</label>
+                <input type="number" step="any" name="day_charge" required>
+            </div>
+
+        </div>
+
+
+        <h2 class="section-title">Evening Usage</h2>
+
+        <div class="form-grid">
+
+            <div class="form-group">
+                <label>Total Evening Minutes</label>
+                <input type="number" step="any" name="eve_minutes" required>
+            </div>
+
+            <div class="form-group">
+                <label>Total Evening Calls</label>
+                <input type="number" name="eve_calls" required>
+            </div>
+
+            <div class="form-group">
+                <label>Total Evening Charge</label>
+                <input type="number" step="any" name="eve_charge" required>
+            </div>
+
+        </div>
+
+
+        <h2 class="section-title">Night Usage</h2>
+
+        <div class="form-grid">
+
+            <div class="form-group">
+                <label>Total Night Minutes</label>
+                <input type="number" step="any" name="night_minutes" required>
+            </div>
+
+            <div class="form-group">
+                <label>Total Night Calls</label>
+                <input type="number" name="night_calls" required>
+            </div>
+
+            <div class="form-group">
+                <label>Total Night Charge</label>
+                <input type="number" step="any" name="night_charge" required>
+            </div>
+
+        </div>
+
+
+        <h2 class="section-title">International Usage</h2>
+
+        <div class="form-grid">
+
+            <div class="form-group">
+                <label>Total International Minutes</label>
+                <input type="number" step="any" name="intl_minutes" required>
+            </div>
+
+            <div class="form-group">
+                <label>Total International Calls</label>
+                <input type="number" name="intl_calls" required>
+            </div>
+
+            <div class="form-group">
+                <label>Total International Charge</label>
+                <input type="number" step="any" name="intl_charge" required>
+            </div>
+
+            <div class="form-group">
+                <label>Customer Service Calls</label>
+                <input type="number" name="customer_service_calls" required>
+            </div>
+
+        </div>
+
+
+        <div class="button-container">
+            <button type="submit">
+                Predict Churn
+            </button>
+        </div>
+
+    </form>
+
+
+    {% if prediction %}
+
+    <div class="result">
+        {{ prediction }}
+    </div>
+
+    {% endif %}
+
+</div>
+
+</body>
+
+</html>
+```
